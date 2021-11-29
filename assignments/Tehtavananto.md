@@ -82,6 +82,8 @@ Resolver-luokkaa voidaan pitää solmujen "treffipalveluna", sillä se hoitaa uu
 
 Kurssin aiheiden kannalta on hyvä selvittää, miten resolver toimii, mutta sen sisäisen logiikan ymmärtäminen ei ole keskeistä harjoitustyön tekemiseksi. Oleellista on ymmärtää, että luodakseen TCP-yhteyden johonkin solmuun, täytyy sen IP-osoite selvitää. Resolver on luotu tätä tarkoitusta varten.
 
+Resolveriin ei tule tehdä muutoksia.
+
 ### Envelope
 
 Envelope on nimensä mukaisesti vertaisverkossa lähetettävän sisällön "kirjekuori". Se sisältää itse hyötykuorman (payload), joka on käytännössä tätä ohjelmaa ajatellen lähes aina *Message*-luokan olio. Envelope ei kuitenkaan teoriassa ota kantaa siihen, mitä sen sisällä kuljetetaan. Hyötykuorman lisäksi Envelope sisältää metatietona kirjekuoren yksilöllisesti identifioivan id-tunnisteen. 
@@ -104,4 +106,5 @@ NetworkService toteuttaa samassa pakkauksessa sijaitsevan Network-rajapinnan. Ne
 	2) Vastaanotettu viesti sekä muokattu viesti ja väri näkyvät käyttöliittymässä
 	3) Muokattu viesti lähetetään eteenpäin naapurivertaisille
 - Toteuttakaa Refiner-luokan viestinmuutosmetodi mutatoimaan viestien tekstisisältöä
-	- Mielikuvitusta saa käyttää! Huomatkaa, että tarkoitus on mutatoida viestisisältöä, ei itse Message-olioita.
+	- Mielikuvitusta saa käyttää! Huomatkaa, että tarkoitus on mutatoida viestisisältöä, ei itse Message-olioita.	
+- Ohjelman ei tarvitse osata toipua tilanteesta, jossa jokin vertaisista tippuu pois välistä.

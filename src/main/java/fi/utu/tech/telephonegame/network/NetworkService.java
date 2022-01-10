@@ -3,6 +3,9 @@ package fi.utu.tech.telephonegame.network;
 
 import java.net.NetworkInterface;
 
+import java.io.*;
+import java.net.*;
+
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -40,8 +43,8 @@ public class NetworkService extends Thread implements Network {
 	 */
 
 	public void initialize(int serverport) {
-			Socket palvelinSocket = serverSocket(serverport);
-			palvelinSocket = serverSocket.accept();
+			ServerSocket palvelinSocket = new ServerSocket(serverport);
+			palvelinSocket.accept();
 
 	}
 
@@ -52,11 +55,11 @@ public class NetworkService extends Thread implements Network {
 	 */
 	
 	public void connect(String clientIP, int clientPort) {
-		Socket asiakasSocket = Socket(clientIP, clientPort);
+		Socket asiakasSocket = new Socket(clientIP, clientPort);
 		InputStream iS = asiakasSocket.getInputStream();
 		OutputStream oS = asiakasSocket.getOutputStream();
 		ObjectOutputStream ulosTulo = new ObjectOutputStream(oS);
-		ObjectInputStream sisaanTulo = new ObjectInpuStream(iS);
+		ObjectInputStream sisaanTulo = new ObjectInputStream(iS);
 
 
 	}

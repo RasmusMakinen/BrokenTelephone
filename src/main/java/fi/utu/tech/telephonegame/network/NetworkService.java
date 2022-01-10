@@ -33,14 +33,16 @@ public class NetworkService extends Thread implements Network {
 		this.start();
 	}
 
-	
+
 	/*
 	 * In this method a server instance has to be created.
 	 * The port used to listen incoming connections is provided by the templete
 	 */
 
 	public void initialize(int serverport) {
-		//TODO
+			Socket palvelinSocket = serverSocket(serverport);
+			palvelinSocket = serverSocket.accept();
+
 	}
 
 	
@@ -50,7 +52,13 @@ public class NetworkService extends Thread implements Network {
 	 */
 	
 	public void connect(String clientIP, int clientPort) {
-		//TODO
+		Socket asiakasSocket = Socket(clientIP, clientPort);
+		InputStream iS = asiakasSocket.getInputStream();
+		OutputStream oS = asiakasSocket.getOutputStream();
+		ObjectOutputStream ulosTulo = new ObjectOutputStream(oS);
+		ObjectInputStream sisaanTulo = new ObjectInpuStream(iS);
+
+
 	}
 
 	/*
@@ -62,7 +70,8 @@ public class NetworkService extends Thread implements Network {
 	private void send(Object out) {
 		//Send the env to all nodes.
 		Envelope env = new Envelope(out);
-
+		ulosTulo.writeObject(env);
+		ulosTulo.flush();
 		//TODO
 	}
 

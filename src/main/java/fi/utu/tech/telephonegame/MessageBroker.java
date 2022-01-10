@@ -10,6 +10,7 @@ import fi.utu.tech.telephonegame.util.ConcurrentExpiringHashSet;
 
 
 
+
 public class MessageBroker extends Thread {
 
 	
@@ -46,7 +47,24 @@ public class MessageBroker extends Thread {
 
 	private Message process(Object procMessage) {
 		
-		return null;
+		if (!(procMessage instanceof Message)) {
+			return null;
+		}
+		Message chekattuViesti = (Message)procMessage; 
+		if (this.prevMessages.containsKey(chekattuViesti.getId())) { 
+			return null;
+		} else {
+			this.gui_io.setReceivedMessage(chekattuViesti.getMessage()); 
+			chekattuViesti.setColor(Refiner.refineColor(chekattuViesti.getColor()));
+			chekattuViesti.setMessage(Refiner.refineText(chekattuViesti.getMessage())); 
+			this.gui_io.setSignal(chekattuViesti.getColor()); 
+			this.gui_io.setRefinedMessage(chekattuViesti.getMessage()); 
+			this.prevMessages.put(chekattuViesti.getId()); 
+			return chekattuViesti;
+
+		}
+
+		
 	}
 
 	/*
@@ -58,6 +76,23 @@ public class MessageBroker extends Thread {
 	 * 
 	 */
 	public void run() {
+		
+		while(true) {
+			Object jonosta = null;
+			try{
+				jonosta = this.procQueue.take();
+			} catch (InterruptedException e) { 
+				e.printStackTrace();
+			}
+			Message muutettuViesti = this.process(jonosta);
+			if(!(muutettuViesti == null)) {
+				this.network.postMessage(muutettuViesti);
+			}
+
+					
+				
+			
+		}
 		
 	}
 	
@@ -103,3 +138,4 @@ public class MessageBroker extends Thread {
 
 	
 }
+

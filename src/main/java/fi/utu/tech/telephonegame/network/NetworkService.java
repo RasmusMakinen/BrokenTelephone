@@ -14,6 +14,7 @@ import java.util.UUID;
 import java.util.concurrent.LinkedTransferQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TransferQueue;
+
 import fi.utu.tech.telephonegame.util.ConcurrentExpiringHashSet;
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -26,6 +27,8 @@ public class NetworkService extends Thread implements Network {
 	private TransferQueue<Object> outQueue = new LinkedTransferQueue<Object>();
 	private TransferQueue<Object> inQueue = new LinkedTransferQueue<Object>();
 	private Resolver resolver;
+	
+	private ArrayList<SocketHandler> socketList;
 	
 	
 
@@ -43,9 +46,22 @@ public class NetworkService extends Thread implements Network {
 	 */
 
 	public void initialize(int serverport) {
-			ServerSocket palvelinSocket = new ServerSocket(serverport);
-			palvelinSocket.accept();
-
+			ServerSocket palvelinSocket;
+			
+			while (true) {
+				try {
+					palvelinSocket = new ServerSocket(serverport);
+				
+					Socket asiakasSocket = palvelinSocket.accept();
+					System.out.println("Yhdistetty " + asiakasSocket.toString());
+					SocketHandler socketHandler = new SocketHandler(asiakasSocket);
+					socketList.add(socketHandler);
+					socketHandler.start();
+					
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 	}
 
 	
@@ -55,13 +71,15 @@ public class NetworkService extends Thread implements Network {
 	 */
 	
 	public void connect(String clientIP, int clientPort) {
-		Socket asiakasSocket = new Socket(clientIP, clientPort);
-		InputStream iS = asiakasSocket.getInputStream();
-		OutputStream oS = asiakasSocket.getOutputStream();
-		ObjectOutputStream ulosTulo = new ObjectOutputStream(oS);
-		ObjectInputStream sisaanTulo = new ObjectInputStream(iS);
-
-
+		try {
+			Socket asiakasSocket = new Socket(clientIP, clientPort);
+			SocketHandler socketHandler = new SocketHandler(asiakasSocket);
+			socketList.add(socketHandler);
+			socketHandler.start();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/*
@@ -73,9 +91,10 @@ public class NetworkService extends Thread implements Network {
 	private void send(Object out) {
 		//Send the env to all nodes.
 		Envelope env = new Envelope(out);
-		ulosTulo.writeObject(env);
-		ulosTulo.flush();
-		//TODO
+		
+		for (SocketHandler socketHandler : socketList) {
+			socketHandler.send(env);
+		}
 	}
 
 	

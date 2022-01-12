@@ -1,4 +1,4 @@
-package fi.utu.tech.telephonegame.network;
+ackage fi.utu.tech.telephonegame.network;
 
 
 import java.net.NetworkInterface;
@@ -10,13 +10,10 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedTransferQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TransferQueue;
 
-import fi.utu.tech.telephonegame.util.ConcurrentExpiringHashSet;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 
@@ -40,7 +37,7 @@ public class NetworkService extends Thread implements Network {
 		this.start();
 	}
 	
-	public void lisääSocketListiin(SocketHandler s) {
+	public void lisaaSocketListiin(SocketHandler s) {
 		
 		socketList.add(s);
 		//TODO miettiä miten lisätään socketlistiin
@@ -94,7 +91,7 @@ public class NetworkService extends Thread implements Network {
 		try {
 			Socket asiakasSocket = new Socket(clientIP, clientPort);
 			SocketHandler socketHandler = new SocketHandler(asiakasSocket, this);
-			socketList.add(socketHandler);
+//			System.out.println("toimiiko");
 			socketHandler.start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

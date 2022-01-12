@@ -8,9 +8,15 @@ public class SocketHandler extends Thread {
 	private Socket socket;
 	private ObjectOutputStream ulosTulo;
 	private ObjectInputStream sisaanTulo;
+	private NetworkService networkService;
 	
-	public SocketHandler(Socket socket) {
+	public SocketHandler(Socket socket, NetworkService networkService ) {
 		this.socket = socket;
+		this.networkService = networkService;
+		networkService.lisääSocketListiin(this);
+		
+		//TODO tähän pitäs lisätä 
+		
 	}
 
 	public void run() {

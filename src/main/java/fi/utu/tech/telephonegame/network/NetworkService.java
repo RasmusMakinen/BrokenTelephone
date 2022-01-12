@@ -11,6 +11,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedTransferQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TransferQueue;
@@ -38,6 +39,12 @@ public class NetworkService extends Thread implements Network {
 	public NetworkService() {
 		this.start();
 	}
+	
+	public void lisääSocketListiin(SocketHandler s) {
+		
+		socketList.add(s);
+		//TODO miettiä miten lisätään socketlistiin
+	}
 
 
 	/*
@@ -46,23 +53,36 @@ public class NetworkService extends Thread implements Network {
 	 */
 
 	public void initialize(int serverport) {
-			ServerSocket palvelinSocket;
+		//ServerSocket palvelinSocket;
+		System.out.println("initialize kutsuttu");
+		
 			
-			while (true) {
-				try {
-					palvelinSocket = new ServerSocket(serverport);
+			
 				
-					Socket asiakasSocket = palvelinSocket.accept();
-					System.out.println("Yhdistetty " + asiakasSocket.toString());
-					SocketHandler socketHandler = new SocketHandler(asiakasSocket);
-					socketList.add(socketHandler);
-					socketHandler.start();
+				Palvelin palvelin;
+				try {
+					
+					palvelin = new Palvelin(serverport, this);
+					palvelin.start();
+					//System.out.println("Yhdistetty ");
+					//ServerSocket palvelinSocket = new ServerSocket(serverport);
+					//System.out.println("Yhdistetty pt2");
+					//Socket asiakasSocket = palvelinSocket.accept();
+					//System.out.println("Yhdistetty pt3");
+					//SocketHandler socketHandler = new SocketHandler(asiakasSocket);
+					//socketList.add(socketHandler);
+					//socketHandler.start();
+					
 					
 				} catch (IOException e) {
+					System.out.println("servercatchi");
 					e.printStackTrace();
 				}
+				System.out.println("ei mitään initializessa pt2");
+				
+				
 			}
-	}
+	
 
 	
 	/*
@@ -73,7 +93,7 @@ public class NetworkService extends Thread implements Network {
 	public void connect(String clientIP, int clientPort) {
 		try {
 			Socket asiakasSocket = new Socket(clientIP, clientPort);
-			SocketHandler socketHandler = new SocketHandler(asiakasSocket);
+			SocketHandler socketHandler = new SocketHandler(asiakasSocket, this);
 			socketList.add(socketHandler);
 			socketHandler.start();
 		} catch (IOException e) {

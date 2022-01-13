@@ -26,7 +26,7 @@ public class NetworkService extends Thread implements Network {
 	private TransferQueue<Object> inQueue = new LinkedTransferQueue<Object>();
 	private Resolver resolver;
 	
-	private ArrayList<SocketHandler> socketList;
+	private CopyOnWriteArrayList<SocketHandler> socketList = new CopyOnWriteArrayList<SocketHandler>();
 	
 	
 
@@ -39,7 +39,9 @@ public class NetworkService extends Thread implements Network {
 	
 	public void lisaaSocketListiin(SocketHandler s) {
 		
+		System.out.println(s);
 		socketList.add(s);
+		System.out.println("Lisätty: " + socketList);
 		//TODO miettiä miten lisätään socketlistiin
 	}
 
@@ -89,9 +91,10 @@ public class NetworkService extends Thread implements Network {
 	
 	public void connect(String clientIP, int clientPort) {
 		try {
+			System.out.println("haloo??");
 			Socket asiakasSocket = new Socket(clientIP, clientPort);
 			SocketHandler socketHandler = new SocketHandler(asiakasSocket, this);
-//			System.out.println("toimiiko");
+			System.out.println("toimiiko");
 			socketHandler.start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

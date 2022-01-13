@@ -46,14 +46,14 @@ public class MessageBroker extends Thread {
 	 */
 
 	private Message process(Object procMessage) {
-		
-		if (!(procMessage instanceof Message)) {
-			return null;
-		}
-		Message chekattuViesti = (Message)procMessage; 
-		if (this.prevMessages.containsKey(chekattuViesti.getId())) { 
-			return null;
-		} else {
+//		try {
+			Message chekattuViesti = (Message) procMessage;
+			
+			if (this.prevMessages.containsKey(chekattuViesti.getId())) { 
+				System.out.println("this.prevMessages.containsKey(chekattuViesti.getId())");
+				return null;
+			}
+			
 			this.gui_io.setReceivedMessage(chekattuViesti.getMessage()); 
 			chekattuViesti.setColor(Refiner.refineColor(chekattuViesti.getColor()));
 			chekattuViesti.setMessage(Refiner.refineText(chekattuViesti.getMessage())); 
@@ -61,10 +61,10 @@ public class MessageBroker extends Thread {
 			this.gui_io.setRefinedMessage(chekattuViesti.getMessage()); 
 			this.prevMessages.put(chekattuViesti.getId()); 
 			return chekattuViesti;
-
-		}
-
-		
+			
+//		} catch(InputMismatchException e){
+//	        return null;
+//	    } 
 	}
 
 	/*
@@ -80,12 +80,16 @@ public class MessageBroker extends Thread {
 		while(true) {
 			Object jonosta = null;
 			try{
+//				System.out.println("jonosta");
 				jonosta = this.procQueue.take();
+//				System.out.println("pääseekö tänne?");
 			} catch (InterruptedException e) { 
 				e.printStackTrace();
 			}
 			Message muutettuViesti = this.process(jonosta);
 			if(!(muutettuViesti == null)) {
+				System.out.println(muutettuViesti);
+				System.out.println("viesti != null");
 				this.network.postMessage(muutettuViesti);
 			}
 

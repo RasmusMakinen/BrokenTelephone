@@ -1,4 +1,4 @@
-ackage fi.utu.tech.telephonegame.network;
+package fi.utu.tech.telephonegame.network;
 
 
 import java.net.NetworkInterface;
@@ -10,6 +10,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedTransferQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TransferQueue;
@@ -77,7 +78,7 @@ public class NetworkService extends Thread implements Network {
 					System.out.println("servercatchi");
 					e.printStackTrace();
 				}
-				System.out.println("ei mitään initializessa pt2");
+//				System.out.println("ei mitään initializessa pt2");
 				
 				
 			}

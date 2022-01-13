@@ -3,6 +3,8 @@ package fi.utu.tech.telephonegame.network;
 import java.io.*;
 import java.net.*;
 
+import fi.utu.tech.telephonegame.Message;
+
 
 public class SocketHandler extends Thread {
 	private Socket socket;
@@ -28,18 +30,30 @@ public class SocketHandler extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		while (true) {
+//		while (true) {
+		//Kootaan message olio envelope olion sisällöstä
 			try {
-				Envelope viesti = new Envelope(((Envelope)sisaanTulo.readObject()));
-				networkService.getOutputQueue().add(viesti.getPayload());
-				System.out.println("Vastaanotettu " + viesti.toString() + " " + viesti.getPayload().toString());
+				//envelopesta message olio
+				Message kirjekuori = (Message) (((Envelope)sisaanTulo.readObject()).getPayload());
+				
+				//messagesta sisältö
+				String kirjekuoriSisalto = kirjekuori.getMessage();
+				
+				//messagesta väri
+				Integer kirjekuoriVari = kirjekuori.getColor();
+				
+				//luodaan lopullinen lähetettävä message
+				Message viesti = new Message(kirjekuoriSisalto, kirjekuoriVari);
+				
+				networkService.getOutputQueue().add(viesti);
+				System.out.println("Vastaanotettu " + viesti.toString() + " " + viesti.getMessage().toString());
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
 
-		}
+//		}
 	}
 
 		public void send (Envelope env){

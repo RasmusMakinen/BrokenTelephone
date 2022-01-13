@@ -30,7 +30,9 @@ public class SocketHandler extends Thread {
 		}
 		while (true) {
 			try {
-				networkService.getOutputQueue().add(new Envelope(((Envelope)sisaanTulo.readObject()).getPayload()));
+				Envelope viesti = new Envelope(((Envelope)sisaanTulo.readObject()));
+				networkService.getOutputQueue().add(viesti.getPayload());
+				System.out.println("Vastaanotettu " + viesti.toString() + " " + viesti.getPayload().toString());
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
@@ -43,6 +45,7 @@ public class SocketHandler extends Thread {
 		public void send (Envelope env){
 			try {
 				ulosTulo.writeObject(env);
+				System.out.println("Lähetetty: " + env.toString());
 				ulosTulo.flush();
 			} catch (IOException e) {
 				e.printStackTrace();

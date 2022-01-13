@@ -2,6 +2,7 @@ package fi.utu.tech.telephonegame;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.UUID;
 import java.util.concurrent.TransferQueue;
 import fi.utu.tech.telephonegame.network.Network;
@@ -49,10 +50,10 @@ public class MessageBroker extends Thread {
 //		try {
 			Message chekattuViesti = (Message) procMessage;
 			
-			if (this.prevMessages.containsKey(chekattuViesti.getId())) { 
-				System.out.println("this.prevMessages.containsKey(chekattuViesti.getId())");
-				return null;
-			}
+//			if (this.prevMessages.containsKey(chekattuViesti.getId())) { 
+//				System.out.println("this.prevMessages.containsKey(chekattuViesti.getId())");
+//				return null;
+//			}
 			
 			this.gui_io.setReceivedMessage(chekattuViesti.getMessage()); 
 			chekattuViesti.setColor(Refiner.refineColor(chekattuViesti.getColor()));
@@ -66,6 +67,7 @@ public class MessageBroker extends Thread {
 //	        return null;
 //	    } 
 	}
+
 
 	/*
 	 * In the run method you need to:
@@ -91,13 +93,8 @@ public class MessageBroker extends Thread {
 				System.out.println(muutettuViesti);
 				System.out.println("viesti != null");
 				this.network.postMessage(muutettuViesti);
-			}
-
-					
-				
-			
+			}	
 		}
-		
 	}
 	
 	

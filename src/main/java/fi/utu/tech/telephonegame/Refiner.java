@@ -519,8 +519,6 @@ public class Refiner {
 	 */
 	public static String refineText(String inText) {
 		String outText = inText;
-
-		// Change the content of the message here.
 		outText = outText + " " + text[rnd.nextInt(text.length)];
 
 		return outText;

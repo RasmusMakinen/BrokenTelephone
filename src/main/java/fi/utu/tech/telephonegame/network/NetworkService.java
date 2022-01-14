@@ -43,7 +43,7 @@ public class NetworkService extends Thread implements Network {
 		System.out.println(s);
 		socketList.add(s);
 		System.out.println("Lisätty: " + socketList);
-		//TODO miettiä miten lisätään socketlistiin
+		
 	}
 
 
@@ -53,34 +53,20 @@ public class NetworkService extends Thread implements Network {
 	 */
 
 	public void initialize(int serverport) {
-		//ServerSocket palvelinSocket;
-		System.out.println("initialize kutsuttu");
+
+
 		
 			
 			
 				
 				Palvelin palvelin;
-				try {
-					
+				try {				
 					palvelin = new Palvelin(serverport, this);
 					palvelin.start();
-					//System.out.println("Yhdistetty ");
-					//ServerSocket palvelinSocket = new ServerSocket(serverport);
-					//System.out.println("Yhdistetty pt2");
-					//Socket asiakasSocket = palvelinSocket.accept();
-					//System.out.println("Yhdistetty pt3");
-					//SocketHandler socketHandler = new SocketHandler(asiakasSocket);
-					//socketList.add(socketHandler);
-					//socketHandler.start();
-					
-					
 				} catch (IOException e) {
 					System.out.println("servercatchi");
 					e.printStackTrace();
-				}
-//				System.out.println("ei mitään initializessa pt2");
-				
-				
+				}		
 			}
 	
 
@@ -92,10 +78,8 @@ public class NetworkService extends Thread implements Network {
 	
 	public void connect(String clientIP, int clientPort) {
 		try {
-			System.out.println("haloo??");
 			Socket asiakasSocket = new Socket(clientIP, clientPort);
 			SocketHandler socketHandler = new SocketHandler(asiakasSocket, this);
-			System.out.println("toimiiko");
 			socketHandler.start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -110,9 +94,7 @@ public class NetworkService extends Thread implements Network {
 	 * and is then put into an envelope object
 	 */
 	private void send(Object out) {
-		//Send the env to all nodes.
-		Envelope env = new Envelope(out);
-		
+		Envelope env = new Envelope(out);	
 		for (SocketHandler socketHandler : socketList) {
 			socketHandler.send(env);
 		}

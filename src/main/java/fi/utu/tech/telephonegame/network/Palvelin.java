@@ -20,33 +20,18 @@ public class Palvelin extends Thread{
     	
 	}
     public void run()  {
-    	
-    	while(true) {
-    		
+    	while(true) {   		
     		try {
-				soketti=palvelinSocket.accept();
-				System.out.println("asiakas yhdistetty");
-				
+				soketti=palvelinSocket.accept();	
 				SocketHandler s = new SocketHandler(soketti, networkService);
 				s.start();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-    		
-    		
+			}		
     	}
-    	
-    	
     }
-    
-
-		
-		
-		
-		
-		
-	}
+}
 
 
 

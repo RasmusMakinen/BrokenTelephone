@@ -3,6 +3,8 @@ package fi.utu.tech.telephonegame;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TransferQueue;
 import fi.utu.tech.telephonegame.network.Network;
@@ -47,13 +49,19 @@ public class MessageBroker extends Thread {
 	 */
 
 	private Message process(Object procMessage) {
-//		try {
+
 			Message chekattuViesti = (Message) procMessage;
 			
-//			if (this.prevMessages.containsKey(chekattuViesti.getId())) { 
-//				System.out.println("this.prevMessages.containsKey(chekattuViesti.getId())");
-//				return null;
-//			}
+			if (!(procMessage instanceof Message)) { 
+				return null;
+			}
+
+			System.out.println("tän ID " +chekattuViesti.getId());
+			
+			if (this.prevMessages.containsKey(chekattuViesti.getId())) { 
+			System.out.println("this.prevMessages.containsKey(chekattuViesti.getId())");
+				return null;
+			}
 			
 			this.gui_io.setReceivedMessage(chekattuViesti.getMessage()); 
 			chekattuViesti.setColor(Refiner.refineColor(chekattuViesti.getColor()));
@@ -62,10 +70,6 @@ public class MessageBroker extends Thread {
 			this.gui_io.setRefinedMessage(chekattuViesti.getMessage()); 
 			this.prevMessages.put(chekattuViesti.getId()); 
 			return chekattuViesti;
-			
-//		} catch(InputMismatchException e){
-//	        return null;
-//	    } 
 	}
 
 
@@ -81,18 +85,14 @@ public class MessageBroker extends Thread {
 		
 		while(true) {
 			Object jonosta = null;
-			try{
-//				System.out.println("jonosta");
+			try {
 				jonosta = this.procQueue.take();
-//				System.out.println("pääseekö tänne?");
 			} catch (InterruptedException e) { 
 				e.printStackTrace();
 			}
 			Message muutettuViesti = this.process(jonosta);
 			if(!(muutettuViesti == null)) {
-				System.out.println(muutettuViesti);
-				System.out.println("viesti != null");
-				this.network.postMessage(muutettuViesti);
+				prevMessages.put(muutettuViesti.getId());this.network.postMessage(muutettuViesti);
 			}	
 		}
 	}
@@ -124,6 +124,7 @@ public class MessageBroker extends Thread {
 	}
 
 	public void send(Message message) {
+		prevMessages.put(message.getId());
 		network.postMessage(message);
 	}
 

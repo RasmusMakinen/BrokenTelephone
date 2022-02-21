@@ -1,7 +1,7 @@
 
 # Broken telephone
 
-Broken telephone game in peer-to-peer networking architecture over TCP-sockets.
+Broken telephone game on peer-to-peer networking architecture over TCP-sockets.
 
 # What I Learned
 <ul>
